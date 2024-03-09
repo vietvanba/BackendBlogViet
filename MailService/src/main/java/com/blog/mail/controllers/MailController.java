@@ -18,4 +18,13 @@ public class MailController {
     public ResponseEntity<?> createMail(@Validated @RequestBody Mail mail) {
         return ResponseEntity.ok(mailService.saveEmail(mail));
     }
+    @GetMapping
+    public ResponseEntity<?> getAllMail(@RequestParam(defaultValue = "0") int pageNo,@RequestParam(defaultValue = "10") int pageSize)
+    {
+        return ResponseEntity.ok(mailService.getAllMail(pageNo,pageSize));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateStatus(@Validated @RequestBody Mail mail, @PathVariable Integer id){
+        return ResponseEntity.ok(mailService.updateStatus(id,mail));
+    }
 }
