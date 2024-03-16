@@ -1,4 +1,4 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

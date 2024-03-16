@@ -1,5 +1,6 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.configs;
 
+import com.blog.apigateway.filters.AuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;

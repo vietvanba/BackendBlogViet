@@ -1,4 +1,4 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.validators;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

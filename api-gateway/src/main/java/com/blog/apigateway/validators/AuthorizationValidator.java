@@ -1,5 +1,6 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.validators;
 
+import com.blog.apigateway.services.JwtUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;

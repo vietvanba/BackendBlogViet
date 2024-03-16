@@ -1,5 +1,8 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.filters;
 
+import com.blog.apigateway.services.JwtUtil;
+import com.blog.apigateway.validators.AuthorizationValidator;
+import com.blog.apigateway.validators.RouterValidator;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

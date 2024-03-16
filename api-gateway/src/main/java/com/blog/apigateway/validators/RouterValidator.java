@@ -1,4 +1,4 @@
-package com.blog.apigateway.config;
+package com.blog.apigateway.validators;
 
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
