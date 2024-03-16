@@ -6,6 +6,13 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+import java.util.Collections;
 
 @Configuration
 @RequiredArgsConstructor
@@ -36,6 +43,21 @@ public class GatewayConfig {
                                 .addResponseHeader("Access-Control-Allow-Headers", "*")
                         )
                         .uri("http://localhost:8083"))
+                .build();
+    }
+    @Bean
+    public RouterFunction<ServerResponse> corsPreflight() {
+        return RouterFunctions.route()
+                .OPTIONS("/api/**", this::handleOptions)
+                .build();
+    }
+    private Mono<ServerResponse> handleOptions(ServerRequest request) {
+        return ServerResponse.ok()
+                .headers(headers -> {
+                    headers.addAll("Access-Control-Allow-Origin", Collections.singletonList("*"));
+                    headers.addAll("Access-Control-Allow-Methods", Collections.singletonList("GET,POST,PUT,DELETE,OPTIONS"));
+                    headers.addAll("Access-Control-Allow-Headers", Collections.singletonList("Authorization,Content-Type"));
+                })
                 .build();
     }
 
