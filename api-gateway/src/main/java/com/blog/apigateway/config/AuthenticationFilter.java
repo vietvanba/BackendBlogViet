@@ -16,20 +16,22 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationFilter implements GatewayFilter {
-    private final RouterValidator validator;
+    private final RouterValidator routerValidator;
+    private final AuthorizationValidator authorizationValidator;
     private final JwtUtil jwtUtil;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
-
-        if (validator.isSecured.test(request)) {
+        ServerHttpRequest request = exchange.getRequest();
+        if (routerValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request))
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             final String token = this.getAuthHeader(request);
-            if(jwtUtil.isInvalid(token))
-                return this.onError(exchange,HttpStatus.FORBIDDEN);
-            this.updateRequest(exchange,token);
+            if (jwtUtil.isInvalid(token))
+                return this.onError(exchange, HttpStatus.FORBIDDEN);
+            if(authorizationValidator.unauthorized.test(request))
+                return  this.onError(exchange,HttpStatus.FORBIDDEN);
+            this.updateRequest(exchange, token);
         }
         return chain.filter(exchange);
     }
@@ -41,7 +43,7 @@ public class AuthenticationFilter implements GatewayFilter {
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0);
+        return request.getHeaders().getOrEmpty("Authorization").get(0).substring(7);
     }
 
     private boolean isAuthMissing(ServerHttpRequest request) {

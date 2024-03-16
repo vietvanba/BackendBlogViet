@@ -13,9 +13,17 @@ public class GatewayConfig {
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
-        return builder.routes().route("mail-service", r -> r.path("/api/mail/**")
-                .filters(f -> f.filter(authenticationFilter))
-                .uri("http://localhost:8080")).build();
+        return builder.routes()
+                .route("mail-service", r -> r.path("/api/mail/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("http://localhost:8080"))
+                .route("auth-service", r -> r.path("/api/auth/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("http://localhost:8082"))
+                .route("location-service", r -> r.path("/api/location/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("http://localhost:8083"))
+                .build();
     }
 
 }
