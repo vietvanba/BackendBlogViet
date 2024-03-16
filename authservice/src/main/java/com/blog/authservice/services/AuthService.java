@@ -2,11 +2,12 @@ package com.blog.authservice.services;
 
 import com.blog.authservice.entities.Account;
 import com.blog.authservice.exceptions.CannotSave;
+import com.blog.authservice.exceptions.LoginFailed;
 import com.blog.authservice.payload.AuthenticationRequest;
 import com.blog.authservice.payload.AuthenticationResponse;
 import com.blog.authservice.payload.RegisterRequest;
 import com.blog.authservice.payload.RegisterResponse;
-import com.blog.authservice.repositories.UserRepository;
+import com.blog.authservice.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +21,7 @@ import java.util.Date;
 public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final AuthenticationManager authenticationManager;
     public RegisterResponse register(RegisterRequest request) {
         var user = Account.builder()
@@ -38,18 +39,18 @@ public class AuthService {
                 .active(request.getActive())
                 .noteActive(request.getNoteActive())
                 .build();
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (accountRepository.existsByEmail(user.getEmail())) {
             throw new CannotSave("Email already exists.\n" +
                     "Please choose another email or reset your password");
         }
-        if (userRepository.existsById(user.getUsername())) {
+        if (accountRepository.existsById(user.getUsername())) {
             throw new CannotSave("The username already exists. \nPlease choose another username");
         }
-        if (userRepository.existsById(user.getPhoneNumber())) {
+        if (accountRepository.existsById(user.getPhoneNumber())) {
             throw new CannotSave("Phone number already exists. \nPlease choose another phone number");
         }
         try {
-            userRepository.save(user);
+            accountRepository.save(user);
             return RegisterResponse.builder()
                     .username(user.getUsername())
                     .firstName(user.getFirstName())
@@ -68,8 +69,23 @@ public class AuthService {
         }
     }
 
-//    public AuthenticationResponse signIn(AuthenticationRequest request) {
-//        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
-//
-//    }
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        try {
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+            authenticationManager.authenticate(authentication);
+        }catch (Exception exception){
+            throw new LoginFailed("Username or password is not correct. Please try again");
+        }
+        var user = accountRepository.findByUsername(request.getUsername())
+                .orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .accessToken(jwtToken)
+                .build();
+    }
 }
