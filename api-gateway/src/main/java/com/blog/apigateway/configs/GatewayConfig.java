@@ -23,38 +23,28 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("mail-service", r -> r.path("/api/mail/**")
-                        .filters(f -> f.filter(authenticationFilter)
-                                .addResponseHeader("Access-Control-Allow-Origin", "*")
-                                .addResponseHeader("Access-Control-Allow-Methods", "*")
-                                .addResponseHeader("Access-Control-Allow-Headers", "*")
-                        )
+                        .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:8081"))
                 .route("auth-service", r -> r.path("/api/auth/**")
-                        .filters(f -> f.filter(authenticationFilter)
-                                .addResponseHeader("Access-Control-Allow-Origin", "*")
-                                .addResponseHeader("Access-Control-Allow-Methods", "*")
-                                .addResponseHeader("Access-Control-Allow-Headers", "*")
-                        )
+                        .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:8082"))
                 .route("location-service", r -> r.path("/api/location/**")
-                        .filters(f -> f.filter(authenticationFilter)
-                                .addResponseHeader("Access-Control-Allow-Origin", "*")
-                                .addResponseHeader("Access-Control-Allow-Methods", "*")
-                                .addResponseHeader("Access-Control-Allow-Headers", "*")
-                        )
+                        .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:8083"))
                 .build();
     }
+
     @Bean
     public RouterFunction<ServerResponse> corsPreflight() {
         return RouterFunctions.route()
                 .OPTIONS("/api/**", this::handleOptions)
                 .build();
     }
+
     private Mono<ServerResponse> handleOptions(ServerRequest request) {
         return ServerResponse.ok()
                 .headers(headers -> {
-                    headers.addAll("Access-Control-Allow-Origin", Collections.singletonList("*"));
+                    headers.addAll("Access-Control-Allow-Origin", Collections.singletonList("https://vanbaviet.com"));
                     headers.addAll("Access-Control-Allow-Methods", Collections.singletonList("GET,POST,PUT,DELETE,OPTIONS"));
                     headers.addAll("Access-Control-Allow-Headers", Collections.singletonList("Authorization,Content-Type"));
                 })
