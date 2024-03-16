@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 @Component
 public class RouterValidator {
-    public static final List<String> openApiEndpoints = List.of("/api/mail");
+    public static final List<String> openApiEndpoints = List.of("/api/mail","/api/auth");
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()
