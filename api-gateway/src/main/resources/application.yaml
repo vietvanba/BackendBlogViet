@@ -2,3 +2,26 @@ jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 server:
   port: 8080
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "https://vanbaviet.com"
+            allowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - DELETE
+              - TRACE
+              - OPTIONS
+              - PATCH
+            allowedHeaders:
+              - "Authorization"
+              - "Content-Type"
+            allowCredentials: true
+            maxAge: 3600
