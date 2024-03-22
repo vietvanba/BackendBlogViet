@@ -24,5 +24,6 @@ spring:
             allowedHeaders:
               - "Authorization"
               - "Content-Type"
-            allowCredentials: true
+#            allowCredentials: true
+            allowCredentials: false
             maxAge: 3600
