@@ -10,7 +10,8 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "https://vanbaviet.com"
+            allowedOrigins: "*"
+#            allowedOrigins: "https://vanbaviet.com"
             allowedMethods:
               - GET
               - HEAD
