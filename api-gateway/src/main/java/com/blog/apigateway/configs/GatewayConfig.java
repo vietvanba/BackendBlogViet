@@ -24,6 +24,9 @@ public class GatewayConfig {
                 .route("location-service", r -> r.path("/api/location/**")
                         .filters(f -> f.filter(authenticationFilter))
                         .uri("http://localhost:8083"))
+                .route("question-service", r -> r.path("/api/question/**")
+                        .filters(f -> f.filter(authenticationFilter))
+                        .uri("http://localhost:8084"))
                 .build();
     }
 }

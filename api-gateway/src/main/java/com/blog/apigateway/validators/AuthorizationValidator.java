@@ -21,6 +21,8 @@ public class AuthorizationValidator {
     @PostConstruct
     public void init() {
         urls.add(new AuthorizationURL("/api/location", HttpMethod.GET, "USER"));
+        urls.add(new AuthorizationURL("/api/question", HttpMethod.GET, "USER"));
+        urls.add(new AuthorizationURL("/api/question", HttpMethod.POST, "USER"));
     }
 
     public Predicate<ServerHttpRequest> unauthorized =
