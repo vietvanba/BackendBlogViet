@@ -5,7 +5,7 @@
     <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     <property name="LOG_FILE" value="api-gateway"/>
-    <property name="LOG_FOLDER" value="/home/vie/BackendBlogViet/.logs/api-gateway"/>
+    <property name="LOG_FOLDER" value="../.logs/api-gateway"/>
     <timestamp key="bySecond" datePattern="yyyy_MM_dd'T'HH_mm_ss"/>
     <timestamp key="byDate" datePattern="yyyy_MM_dd"/>
     <appender name="FILE"
