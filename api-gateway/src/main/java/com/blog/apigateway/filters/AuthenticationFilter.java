@@ -41,7 +41,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             this.updateRequest(exchange, token);
         }
-        LOGGER.info("Close request. Succeed");
+        LOGGER.info("Close request. Passed Authorization");
         return chain.filter(exchange);
     }
 
