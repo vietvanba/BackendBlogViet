@@ -26,5 +26,5 @@ spring:
             allowCredentials: ${ALLOW_CREDENTIALS:}
             maxAge: 3600
 log_path:
-  folder: "../.logs/api-gateway/"
+  folder: "/var/log/api-gateway/"
   file: "/api-gateway"
