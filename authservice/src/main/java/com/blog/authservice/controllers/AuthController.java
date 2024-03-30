@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
     private final AuthService service;
 
     @PostMapping("/register")
@@ -27,8 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletRequest req) {
-        LOGGER.info("Login request by user; username: "+request.getUsername()+"; ip address: "+req.getRemoteAddr());
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(service.login(request));
     }
 }

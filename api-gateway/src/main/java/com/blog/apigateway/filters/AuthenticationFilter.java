@@ -5,6 +5,8 @@ import com.blog.apigateway.validators.AuthorizationValidator;
 import com.blog.apigateway.validators.RouterValidator;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -22,10 +24,12 @@ public class AuthenticationFilter implements GatewayFilter {
     private final RouterValidator routerValidator;
     private final AuthorizationValidator authorizationValidator;
     private final JwtUtil jwtUtil;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        LOGGER.info("URL: "+request.getURI()+" Ip address: "+request.getRemoteAddress().getAddress().getHostAddress());
         if (routerValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request))
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
