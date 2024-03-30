@@ -1,5 +1,5 @@
 jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  secret: ${JWT_SECRET:}
 server:
   port: 8080
 spring:
@@ -10,8 +10,7 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
-#            allowedOrigins: "https://vanbaviet.com"
+            allowedOrigins: ${ALLOWED_ORIGINS:}
             allowedMethods:
               - GET
               - HEAD
@@ -24,6 +23,8 @@ spring:
             allowedHeaders:
               - "Authorization"
               - "Content-Type"
-#            allowCredentials: true
-            allowCredentials: false
+            allowCredentials: ${ALLOW_CREDENTIALS:}
             maxAge: 3600
+log_path:
+  folder: "../.logs/api-gateway"
+  file: "/api-gateway"
