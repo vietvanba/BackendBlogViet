@@ -29,23 +29,26 @@ public class AuthenticationFilter implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        LOGGER.info("URL: "+request.getURI()+" Ip address: "+request.getRemoteAddress().getAddress().getHostAddress());
+        LOGGER.info("Start request");
+        LOGGER.info("URL: " + request.getURI() + " Ip address: " + request.getHeaders().get("X-Forwarded-For"));
         if (routerValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request))
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             final String token = this.getAuthHeader(request);
             if (jwtUtil.isInvalid(token))
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
-            if(authorizationValidator.unauthorized.test(request))
-                return  this.onError(exchange,HttpStatus.FORBIDDEN);
+            if (authorizationValidator.unauthorized.test(request))
+                return this.onError(exchange, HttpStatus.FORBIDDEN);
             this.updateRequest(exchange, token);
         }
+        LOGGER.info("Close request. Succeed");
         return chain.filter(exchange);
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
+        LOGGER.error("Close request. HttpStatus: " + httpStatus);
         return response.setComplete();
     }
 
