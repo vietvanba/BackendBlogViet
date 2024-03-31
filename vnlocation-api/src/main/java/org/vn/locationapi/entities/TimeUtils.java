@@ -1,4 +1,4 @@
-package com.blog.mail.entities;
+package org.vn.locationapi.entities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

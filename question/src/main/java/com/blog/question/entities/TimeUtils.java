@@ -1,4 +1,4 @@
-package com.blog.mail.entities;
+package com.blog.question.entities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
